@@ -131,8 +131,8 @@ def decompress_channel(data, rows_blocks, cols_blocks, q_table, dc_huff, ac_huff
             ac_coeffs.extend([0]*(63 - len(ac_coeffs)))
         coeffs = [dc_coeffs[blk_idx]] + ac_coeffs[:63]
         quant = inverse_zigzag_8x8(coeffs)
-        deq = dequantize(quant, q_table)
-        block = idct_2d(deq) + 128
+        deq = dequantize(quant.astype(np.float64), q_table)
+        block = idct_2d(deq.astype(np.float64)) + 128
         block = np.clip(block, 0, 255)
         blocks.append(block)
     channel = merge_blocks(blocks, rows_blocks, cols_blocks, 8)
@@ -221,13 +221,12 @@ def run_tests():
         "RAW_bw_nodith.raw",
         "RAW_bw_dith.raw"
     ]
-    qualities = range(10, 91, 10)
+    qualities = range(90, 91, 10)
     for raw_file in raw_files:
         raw_path = test_dir / raw_file
         if not raw_path.exists():
-            print(f"Пропуск: {raw_path} не найден")
             continue
-        print(f"Обрабатываю {raw_path.name}")
+        print(f"Обработка {raw_path.name}")
         sizes = []
         for q in qualities:
             compressor = JPEGCompressor(quality=q)
@@ -251,5 +250,4 @@ def run_tests():
         plt.close()
     print("Тестирование завершено.")
 
-if __name__ == "__main__":
-    run_tests()
+run_tests()
