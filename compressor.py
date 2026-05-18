@@ -164,7 +164,7 @@ class JPEGCompressor:
             q_tables = [self.qt_lum, self.qt_chrom, self.qt_chrom]
             dc_huffs = [self.dc_lum_huff, self.dc_chrom_huff, self.dc_chrom_huff]
             ac_huffs = [self.ac_lum_huff, self.ac_chrom_huff, self.ac_chrom_huff]
-            huff_ids = [(0,0,0), (0,1,1), (0,1,1)]
+            huff_ids = [(0,0,0), (1,1,1), (1,1,1)]
             q_table_dict = {0: self.qt_lum, 1: self.qt_chrom}
         elif img_type in (0x01, 0x02):
             img = np.frombuffer(img_data, dtype=np.uint8).reshape((height, width))
@@ -221,7 +221,7 @@ def run_tests():
         "RAW_bw_nodith.raw",
         "RAW_bw_dith.raw"
     ]
-    qualities = range(90, 91, 10)
+    qualities = range(10, 91, 10)
     for raw_file in raw_files:
         raw_path = test_dir / raw_file
         if not raw_path.exists():
